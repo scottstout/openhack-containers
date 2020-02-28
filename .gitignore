@@ -330,3 +330,5 @@ ASALocalRun/
 .mfractor/
 src/sql-secret.sh
 src/poi/EnvironmentVars.sh
+src/secrets-api.sh
+src/secrets-web.sh

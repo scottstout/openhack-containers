@@ -1,49 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poi-deployment
+  name: trip-deployment
   namespace: api
   labels:
-    deploy: poi
+    deploy: trips
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: poi
+      app: trips
   template:
     metadata:
       labels:
-        app: poi
+        app: trips
     spec:
       containers:
-      - image: "registryipy0113.azurecr.io/poi:1.0"
+      - image: "registryipy0113.azurecr.io/trips:1.0"
         imagePullPolicy: Always
-        name: poi
+        name: trips
         ports:
-          - containerPort: 8080
+          - containerPort: 80
             name: http
             protocol: TCP
         env:
-          - name: WEB_SERVER_BASE_URI
-            value: 'http://0.0.0.0'
-          - name: WEB_PORT
-            value: '8080'
+          - name: PORT
+            value: '80'
+          - name: OPENAPI_DOCS_URI
+            value: 'http://localhost'
+          - name: DEBUG_LOGGING
+            value: 'true'
         envFrom:
           - secretRef:
               name: sql
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: poi
+  name: trips
   namespace: api
 spec:
   type: ClusterIP
   selector:
-    app: poi
+    app: trips
   ports:
     - protocol: TCP
-      name: poi-http
+      name: trips-http
       port: 80
-      targetPort: 8080
+      targetPort: 80
